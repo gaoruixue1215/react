@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import Axios from 'axios';
 export default class Request extends Component {
-    constructor(){
+    constructor(){//对象的构造方法
         super();
-        this.state = {
-            data:[]
+        this.state = {//状态
+            data:[]//空
         }
     }
     componentDidMount(){
@@ -12,7 +12,7 @@ export default class Request extends Component {
             return res.json();
         })
         .then((res)=>{
-            this.setState({
+            this.setState({//重新设置状态
                 data:res.result
             })
             console.log(res);

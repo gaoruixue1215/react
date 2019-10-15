@@ -1,9 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';import ShowTime from './ShowTime';
-//import Todolist from './Todolist/Todolist';
-import Request from './Request/Request';
-ReactDOM.render(<Request/>,document.getElementById('root'));
+import './index.css';
+import ShowTime from './ShowTime';
+import Todolist from './Todolist/Todolist';
+import Request from './Request';
+
+ReactDOM.render(<Request/>,document.getElementById('root'));//把react元素渲染到root节点
 // 组件交互
 // 父组件--->子组件：调用时在子组件上添加属性
 // 在子组件中通过props获取数据
