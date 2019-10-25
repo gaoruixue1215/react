@@ -1,62 +1,75 @@
 import React, { Component } from 'react'
 import Todoing from './Todoing';
+import ToDone from './ToDone';
 import Todoinput from './Todoinput';
 
 export default class Todolist extends Component {
-    constructor(){//创建和初始化class创建的对象的特殊方法。
+    constructor(){
         super();
+        var todo = localStorage.todo != null ? JSON.parse(localStorage.todo) : [];
+        var todone = localStorage.todone != null ? JSON.parse(localStorage.todone) : [];
         this.state = {
-            todo: [1,2,3]
+            todo: todo,
+            todone:todone
         }
-
-        // var arr = [1,2,{a:100}];
-        // 深拷贝
-        // var b = JSON.parse(JSON.stringify(arr));
-        // b[2].a = 200;
-        // console.log(arr);
-
-        // 对象的拷贝
-        var a= {a:100,b:200};
-        // var o = Object.assign({},a);
-        // console.log(o===a);
-        // console.log(o);
-        // Object.keys返回由属性名组成的一个数组
-        Object.keys(a).forEach((item)=>{
-            console.log(item);
-            console.log(a[item]);
-        })
-        // 尽量不用for in
-        // for(var item in a){
-        //     console.log(a);
-        // }
     }
-    addItem = (msg)=>{
-        // this.state.todo.push(msg)
-        // console.log(this.state.todo)
+    addItem = (data)=>{
+        var todo = [...this.state.todo,data];
         this.setState({
-            todo: [...this.state.todo,msg]
+            todo:todo
+        },()=>{
+            localStorage.setItem('todo',JSON.stringify(todo));
         })
-        console.log(msg);
-    }
-    delItem = (a)=>{
-        // this.state.todo.splice(a,1); //不要写
-        // 深拷贝\浅拷贝
-        //状态（state）
-        //1、不要直接改变、处理状态
-        var todo = [...this.state.todo];
-        todo.splice(a,1);
-        //2、setState是异步的
-        this.setState(
-            {todo}
-        )
-    }
 
+    }
+    delTodoItem = (id)=>{
+        var todo = [...this.state.todo];
+        todo.splice(id,1);
+        this.setState({
+            todo:todo
+        },()=>{
+            localStorage.setItem('todo',JSON.stringify(todo));
+        })
+        
+    }
+    delDoneItem = (id)=>{
+        var todone = [...this.state.todone];
+        todone.splice(id,1);
+        this.setState({
+            todone:todone
+        },()=>{
+            localStorage.setItem('todone',JSON.stringify(todone));
+        })
+        
+    }
+    doneItem = (data)=>{
+        var todone = [...this.state.todone,data];
+        this.setState({
+            todone:todone
+        },()=>{
+            localStorage.setItem('todone',JSON.stringify(todone));
+        })
+        
+    }
+    changeItem = (id) =>{
+        var todone =  [...this.state.todone,this.state.todo[id]];
+        this.delTodoItem(id);
+        this.setState({
+            todone:todone
+        },()=>{
+            localStorage.setItem('todone',JSON.stringify(todone));
+        })
+
+    }
     render() {
         return (
             <div>
                 <Todoinput addTodo={this.addItem}/>
-                <Todoing delTodo={this.delItem} todo={this.state.todo}/>
+                <Todoing delTodo={this.delTodoItem} todo={this.state.todo} changeTodo={this.changeItem}/>
+                <ToDone doneTodo={this.doneItem} todone={this.state.todone} changeTodo={this.changeItem} delTodone={this.delDoneItem}/>
             </div>
         )
     }
 }
+
+
